@@ -14,11 +14,11 @@ file(GLOB_RECURSE STM32WL_HAL_SRC
         "external/stm32wl_cmsis/Include/*.h"
 )
 
-project(wl C CXX ASM)
+project(on9ldr C CXX ASM)
 
 
 add_executable(
-        wlboot
+        on9ldr
         "main/stm32wlxx_it.c" "main/stm32wlxx_it.h"
         "main/startup_stm32wle5xx.s" "main/system_stm32wlxx.c"
         ${STM32WL_HAL_SRC}
@@ -28,7 +28,7 @@ add_executable(
         "main/misc/log.c" "main/misc/log.h"
 )
 
-target_include_directories(wlboot PUBLIC
+target_include_directories(on9ldr PUBLIC
         "external/stm32wl_cmsis/Include"
         "external/stm32wl_hal/Inc" "external/printf/src/printf"
         "main" "main/misc" "external/cmsis/Include"
@@ -36,13 +36,13 @@ target_include_directories(wlboot PUBLIC
 
 if (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
     message("Build in Release+Log mode")
-    target_compile_options(wlboot PUBLIC
+    target_compile_options(on9ldr PUBLIC
             -ffunction-sections -fdata-sections -flto -Os
             -fno-rtti -fno-asynchronous-unwind-tables -fno-omit-frame-pointer -fno-exceptions
             -mthumb -mcpu=cortex-m4 -mfloat-abi=soft
     )
 
-    target_link_options(wlboot PUBLIC
+    target_link_options(on9ldr PUBLIC
             -T${CMAKE_CURRENT_LIST_DIR}/misc/stm32wle5.ld
             -Wl,-Map=\"${PROJECT_NAME}.map\"
             -lc -flto -Os
@@ -50,27 +50,27 @@ if (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
             -mthumb -mcpu=cortex-m4 -mfloat-abi=soft
     )
 
-    target_compile_definitions(wlboot PUBLIC
+    target_compile_definitions(on9ldr PUBLIC
             CORE_CM4=1
             STM32WLE5xx=1
             USE_FULL_LL_DRIVER=1
     )
 elseif(CMAKE_BUILD_TYPE MATCHES Release)
     message("Build in Release with no log mode")
-    target_compile_options(wlboot PUBLIC
+    target_compile_options(on9ldr PUBLIC
             -ffunction-sections -fdata-sections -flto -Os
             -fno-rtti -fno-asynchronous-unwind-tables -fno-omit-frame-pointer -fno-exceptions
             -mthumb -mcpu=cortex-m4 -mfloat-abi=soft
     )
 
-    target_link_options(wlboot PUBLIC
+    target_link_options(on9ldr PUBLIC
             -T${CMAKE_CURRENT_LIST_DIR}/misc/stm32wle5.ld
             -Wl,-Map=\"${PROJECT_NAME}.map\"
             -Wl,--gc-sections -flto -Os -specs=nano.specs -specs=nosys.specs
             -mthumb -mcpu=cortex-m4 -mfloat-abi=soft
     )
 
-    target_compile_definitions(wlboot PUBLIC
+    target_compile_definitions(on9ldr PUBLIC
             CORE_CM4=1
             STM32WLE5xx=1
             USE_FULL_LL_DRIVER=1
@@ -78,14 +78,14 @@ elseif(CMAKE_BUILD_TYPE MATCHES Release)
     )
 else()
     message("Unknown state, debug mode")
-    target_compile_options(wlboot PUBLIC
+    target_compile_options(on9ldr PUBLIC
             -Og
             -ffunction-sections -fdata-sections
             -fno-rtti -fno-asynchronous-unwind-tables -fno-omit-frame-pointer -fno-exceptions
             -mthumb -mcpu=cortex-m4 -mfloat-abi=soft
     )
 
-    target_link_options(wlboot PUBLIC
+    target_link_options(on9ldr PUBLIC
             -Og
             -T${CMAKE_CURRENT_LIST_DIR}/misc/stm32wle5.ld
             -Wl,-Map=\"${PROJECT_NAME}.map\"
@@ -94,7 +94,7 @@ else()
             -mthumb -mcpu=cortex-m4 -mfloat-abi=soft
     )
 
-    target_compile_definitions(wlboot PUBLIC
+    target_compile_definitions(on9ldr PUBLIC
             CORE_CM4=1
             STM32WLE5xx=1
             USE_FULL_LL_DRIVER=1
@@ -103,15 +103,15 @@ endif()
 
 if (STM32WL_HAS_TCXO MATCHES 1)
     message(STATUS "on9loader: TCXO enabled")
-    target_compile_definitions(wlboot PUBLIC STM32WL_HAS_TCXO=1)
+    target_compile_definitions(on9ldr PUBLIC STM32WL_HAS_TCXO=1)
 elseif()
     message(STATUS "on9loader: TCXO disabled")
 endif()
 
 set(linker_script "misc/stm32wle5.ld")
-set_target_properties(wlboot PROPERTIES SUFFIX ".elf")
-add_custom_command(TARGET wlboot POST_BUILD
-        COMMAND arm-none-eabi-size --format=berkeley --totals "$<TARGET_FILE:wlboot>"
-        COMMAND ${CMAKE_OBJCOPY} -Oihex "$<TARGET_FILE:wlboot>" firmware.hex
-        COMMAND ${CMAKE_OBJCOPY} -Obinary "$<TARGET_FILE:wlboot>" firmware.bin
+set_target_properties(on9ldr PROPERTIES SUFFIX ".elf")
+add_custom_command(TARGET on9ldr POST_BUILD
+        COMMAND arm-none-eabi-size --format=berkeley --totals "$<TARGET_FILE:on9ldr>"
+        COMMAND ${CMAKE_OBJCOPY} -Oihex "$<TARGET_FILE:on9ldr>" firmware.hex
+        COMMAND ${CMAKE_OBJCOPY} -Obinary "$<TARGET_FILE:on9ldr>" firmware.bin
         COMMENT "Invoking: Cross ARM GNU Print Size")
