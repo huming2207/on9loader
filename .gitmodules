@@ -1,0 +1,9 @@
+[submodule "external/printf"]
+	path = external/printf
+	url = https://github.com/eyalroz/printf.git
+[submodule "external/stm32wl_hal"]
+	path = external/stm32wl_hal
+	url = https://github.com/STMicroelectronics/stm32wlxx-hal-driver.git
+[submodule "external/stm32wl_cmsis"]
+	path = external/stm32wl_cmsis
+	url = https://github.com/STMicroelectronics/cmsis-device-wl.git
