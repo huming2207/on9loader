@@ -30,8 +30,10 @@ add_executable(
 
 target_include_directories(on9ldr PUBLIC
         "external/stm32wl_cmsis/Include"
-        "external/stm32wl_hal/Inc" "external/printf/src/printf"
-        "main" "main/misc" "external/cmsis/Include"
+        "external/stm32wl_hal/Inc"
+        "external/printf/src/printf" "external/printf/src"
+        "external/cmsis/Include"
+        "main" "main/misc"
 )
 
 if (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
