@@ -2,5 +2,8 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/printf" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/stm32wl_cmsis" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/stm32wl_hal" vcs="Git" />
   </component>
 </project>
