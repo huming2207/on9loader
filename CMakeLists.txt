@@ -32,6 +32,8 @@ add_executable(
         "main/hal/mac/subghz.cpp" "main/hal/mac/subghz.hpp"
         "external/printf/src/printf/printf.c"
         "main/misc/log.c" "main/misc/log.h"
+        "main/on9ldr.cpp" "main/on9ldr.hpp"
+        "main/bl_cfg.cpp" "main/bl_cfg.hpp"
 )
 
 target_include_directories(on9ldr PUBLIC
@@ -51,7 +53,7 @@ if (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
     )
 
     target_link_options(on9ldr PUBLIC
-            -T${CMAKE_CURRENT_LIST_DIR}/misc/stm32wle5.ld
+            -T${CMAKE_CURRENT_LIST_DIR}/misc/on9ldr_stm32wle5.ld
             -Wl,-Map=\"${PROJECT_NAME}.map\"
             -lc -flto -Os
             -Wl,--gc-sections -specs=nano.specs -specs=nosys.specs
@@ -79,7 +81,7 @@ elseif(CMAKE_BUILD_TYPE MATCHES Release)
 
     target_link_options(on9ldr PUBLIC
             -Os -g -s
-            -T${CMAKE_CURRENT_LIST_DIR}/misc/stm32wle5.ld
+            -T${CMAKE_CURRENT_LIST_DIR}/misc/on9ldr_stm32wle5.ld
             -Wl,-Map=\"${PROJECT_NAME}.map\"
             -lc
             -Wl,--gc-sections --specs=nano.specs
@@ -109,7 +111,7 @@ else()
 
     target_link_options(on9ldr PUBLIC
             -Og
-            -T${CMAKE_CURRENT_LIST_DIR}/misc/stm32wle5.ld
+            -T${CMAKE_CURRENT_LIST_DIR}/misc/on9ldr_stm32wle5.ld
             -Wl,-Map=\"${PROJECT_NAME}.map\"
             -lc
             -Wl,--gc-sections -specs=nano.specs -specs=nosys.specs
@@ -136,5 +138,5 @@ elseif()
     message(STATUS "on9loader: TCXO disabled")
 endif()
 
-set(linker_script "misc/stm32wle5.ld")
+set(linker_script "misc/on9ldr_stm32wle5.ld")
 set_target_properties(on9ldr PROPERTIES SUFFIX ".elf")
