@@ -34,6 +34,7 @@ add_executable(
         "main/misc/log.c" "main/misc/log.h"
         "main/on9ldr.cpp" "main/on9ldr.hpp"
         "main/bl_cfg.cpp" "main/bl_cfg.hpp"
+        "main/fault_handler.c" "main/fault_handler.h"
 )
 
 target_include_directories(on9ldr PUBLIC
@@ -53,6 +54,7 @@ if (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
     )
 
     target_link_options(on9ldr PUBLIC
+            -L${CMAKE_CURRENT_LIST_DIR}/misc
             -T${CMAKE_CURRENT_LIST_DIR}/misc/on9ldr_stm32wle5.ld
             -Wl,-Map=\"${PROJECT_NAME}.map\"
             -lc -flto -Os
@@ -81,6 +83,7 @@ elseif(CMAKE_BUILD_TYPE MATCHES Release)
 
     target_link_options(on9ldr PUBLIC
             -Os -g -s
+            -L${CMAKE_CURRENT_LIST_DIR}/misc
             -T${CMAKE_CURRENT_LIST_DIR}/misc/on9ldr_stm32wle5.ld
             -Wl,-Map=\"${PROJECT_NAME}.map\"
             -lc
@@ -111,6 +114,7 @@ else()
 
     target_link_options(on9ldr PUBLIC
             -Og
+            -L${CMAKE_CURRENT_LIST_DIR}/misc
             -T${CMAKE_CURRENT_LIST_DIR}/misc/on9ldr_stm32wle5.ld
             -Wl,-Map=\"${PROJECT_NAME}.map\"
             -lc
